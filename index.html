@@ -47,7 +47,9 @@
         </audio>
         <br />
         <!-- Play button -->
-        <button type="button" id="button">PLAY</button>
+        <button type="button" id="playButton">TTS</button>
+        <!-- Download button -->
+        <button type="button" id="downloadButton">DOWNLOAD</button>
         <br />
         <!-- Character count -->
         Number of Characters: <span id="message">0</span>
@@ -56,10 +58,12 @@
         <hr />
         <br />
         <!-- Image -->
-        <img src="img/1.jpg" alt="1" style="width: 650px; height: 250px" />
+        <img src="1.jpg" alt="1" style="width: 650px; height: 250px" />
         <br />
 
         <script>
+            let audioBlob = null;
+
             // Function to handle text-to-speech conversion
             async function submit() {
                 let text = document.getElementById('text').value;
@@ -77,14 +81,13 @@
                     return;
                 }
 
-                let mp3 = await speak.blob();
+                audioBlob = await speak.blob();
 
-                let blobUrl = URL.createObjectURL(mp3);
+                let blobUrl = URL.createObjectURL(audioBlob);
                 document.getElementById('source').setAttribute('src', blobUrl);
                 let audio = document.getElementById('audio');
                 audio.pause();
                 audio.load();
-                audio.play();
             }
 
             // Update character count as user types
@@ -99,10 +102,23 @@
                 }
             };
 
-            // Trigger text-to-speech on button click
-            document.getElementById('button').onclick = submit;
+            // Trigger text-to-speech on "PLAY" button click
+            document.getElementById('playButton').onclick = submit;
+
+            // Download audio when the "DOWNLOAD" button is clicked
+            document.getElementById('downloadButton').onclick = function () {
+                if (audioBlob) {
+                    let blob = new Blob([audioBlob], { type: 'audio/wav' });
+                    let url = URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'audio.wav';
+                    a.click();
+                } else {
+                    alert('No audio available to download.');
+                }
+            };
         </script>
     </div>
 </body>
 </html>
-
