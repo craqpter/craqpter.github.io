@@ -1,9 +1,13 @@
+---
+layout: default
+---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
     <title>Chisinau Weather</title>
 </head>
 <body>
@@ -12,24 +16,24 @@
         <div class="weather-today">
             <h2>Today</h2>
             <div class="weather-info">
-                <img src="emojis/sun.png" alt="Sunny Emoji">
-                <p class="temperature">28°C</p>
+                <img src="{{ '/assets/emojis/sun.png' | relative_url }}" alt="Sunny Emoji">
+                <p class="temperature" id="today-temperature">Loading...</p>
             </div>
         </div>
         <div class="weather-forecast">
             <h2>Next 2 Days</h2>
             <div class="forecast-day">
                 <p>Tomorrow</p>
-                <img src="emojis/cloud.png" alt="Cloudy Emoji">
-                <p class="temperature">25°C</p>
+                <img src="{{ '/assets/emojis/cloud.png' | relative_url }}" alt="Cloudy Emoji">
+                <p class="temperature" id="tomorrow-temperature">Loading...</p>
             </div>
             <div class="forecast-day">
                 <p>Day After Tomorrow</p>
-                <img src="emojis/rain.png" alt="Rainy Emoji">
-                <p class="temperature">22°C</p>
+                <img src="{{ '/assets/emojis/rain.png' | relative_url }}" alt="Rainy Emoji">
+                <p class="temperature" id="day-after-tomorrow-temperature">Loading...</p>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
 </body>
 </html>
