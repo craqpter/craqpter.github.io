@@ -37,3 +37,111 @@ layout: default
     <script src="{{ '/assets/js/script.js' | relative_url }}"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Text-to-Speech Reader</title>
+    <style>
+        /* CSS styles for the page */
+        textarea {
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        div {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="view">
+        <h3>Text-to-Speech Reader</h3>
+        <!-- Input textarea -->
+        <textarea id="text" rows="15" cols="80" maxlength="500" placeholder="Enter text here..."></textarea>
+        <br />
+        <!-- Audio player -->
+        <audio id="audio" controls="">
+            <source id="source" type="audio/wav" />
+        </audio>
+        <br />
+        <!-- Play button -->
+        <button type="button" id="button">PLAY</button>
+        <br />
+        <!-- Character count -->
+        Number of Characters: <span id="message">0</span>
+        <br />
+        <br />
+        <hr />
+        <br />
+        <!-- Image -->
+        <img src="1.jpg" alt="1" style="width: 250px; height: 250px" />
+        <br />
+
+        <script>
+            // Function to handle text-to-speech conversion
+            async function submit() {
+                let text = document.getElementById('text').value;
+
+                if (text === '') {
+                    alert('You must enter some text...');
+                    return;
+                }
+
+                // Fetch the text-to-speech audio
+                let speak = await fetch('https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=' + encodeURIComponent(text.trim()));
+
+                if (speak.status != 200) {
+                    alert(await speak.text());
+                    return;
+                }
+
+                let mp3 = await speak.blob();
+
+                let blobUrl = URL.createObjectURL(mp3);
+                document.getElementById('source').setAttribute('src', blobUrl);
+                let audio = document.getElementById('audio');
+                audio.pause();
+                audio.load();
+                audio.play();
+            }
+
+            // Update character count as user types
+            document.getElementById('text').oninput = function () {
+                document.getElementById('message').innerHTML = document.getElementById('text').value.length;
+            };
+
+            // Handle text submission on Enter key press
+            document.getElementById('text').onkeydown = function (e) {
+                if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+                    submit();
+                }
+            };
+
+            // Trigger text-to-speech on button click
+            document.getElementById('button').onclick = submit;
+        </script>
+    </div>
+</body>
+</html>
+
